@@ -16,9 +16,9 @@
  *
  * Usage:
  * $ # for 4.5/4.6/C based 4.7
- * $ gcc -I`gcc -print-file-name=plugin`/include -I`gcc -print-file-name=plugin`/include/c-family -fPIC -shared -O2 -o cyc_complexity_plugin.so cyc_complexity_plugin.c
+ * $ gcc -I`gcc -print-file-name=plugin`/include -I`gcc -print-file-name=plugin`/include/c-family -fPIC -shared -O2 -std=gnu99 -ggdb -o cyc_complexity_plugin.so cyc_complexity_plugin.c
  * $ # for C++ based 4.7/4.8+
- * $ g++ -I`g++ -print-file-name=plugin`/include -I`g++ -print-file-name=plugin`/include/c-family -fPIC -shared -O2 -o cyc_complexity_plugin.so cyc_complexity_plugin.c
+ * $ g++ -I`g++ -print-file-name=plugin`/include -I`g++ -print-file-name=plugin`/include/c-family -fPIC -shared -O2 -std=gnu++98 -fno-rtti -ggdb -o cyc_complexity_plugin.so cyc_complexity_plugin.c
  *
  * $ gcc -fplugin=./cyc_complexity_plugin.so test.c -O2
  */

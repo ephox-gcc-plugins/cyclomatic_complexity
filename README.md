@@ -24,7 +24,7 @@ Compiling & Usage
 ```shell
 $ gcc -I`gcc -print-file-name=plugin`/include \
       -I`gcc -print-file-name=plugin`/include/c-family \
-      -fPIC -shared -O2 \
+      -fPIC -shared -O2 -std=gnu99 -ggdb \
       -o cyc_complexity_plugin.so cyc_complexity_plugin.c
 ```
 
@@ -33,7 +33,7 @@ $ gcc -I`gcc -print-file-name=plugin`/include \
 ```shell
 $ g++ -I`g++ -print-file-name=plugin`/include \
       -I`g++ -print-file-name=plugin`/include/c-family \
-      -fPIC -shared -O2 \
+      -fPIC -shared -O2 -std=gnu++98 -fno-rtti -ggdb \
       -o cyc_complexity_plugin.so cyc_complexity_plugin.c
 ```
 
