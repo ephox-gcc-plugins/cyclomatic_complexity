@@ -11,15 +11,11 @@ The complexity M is then defined as `M = E − N + 2P` where
     N = the number of nodes of the graph
     P = the number of connected components (exit nodes).
 
-Homepage
---------
-
-http://www.grsecurity.net/~ephox/
 
 Compiling & Usage
 -----------------
 
-##### gcc 4.5 - 4.9:
+##### gcc 4.5 - 5:
 
 ```shell
 $ make clean ; make

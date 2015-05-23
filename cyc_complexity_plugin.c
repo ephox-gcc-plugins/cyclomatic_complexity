@@ -1,6 +1,9 @@
 /*
- * Copyright 2012, 2013, 2014 by Emese Revfy <re.emese@gmail.com>
+ * Copyright 2011-2015 by Emese Revfy <re.emese@gmail.com>
  * Licensed under the GPL v2, or (at your option) v3
+ *
+ * Homepage:
+ * https://github.com/ephox-gcc-plugins/cyclomatic_complexity
  *
  * http://en.wikipedia.org/wiki/Cyclomatic_complexity
  * The complexity M is then defined as:
@@ -11,12 +14,8 @@
  *  N = the number of nodes of the graph
  *  P = the number of connected components (exit nodes).
  *
- * Homepage:
- * http://www.grsecurity.net/~ephox/
- *
- * Usage (4.5 - 4.9):
- * $ make clean; make
- * $ make run
+ * Usage (4.5 - 5):
+ * $ make clean; make run
  */
 
 #include "gcc-common.h"
@@ -24,7 +23,7 @@
 int plugin_is_GPL_compatible;
 
 static struct plugin_info cyc_complexity_plugin_info = {
-	.version	= "20140218",
+	.version	= "20150523",
 	.help		= "Cyclomatic Complexity\n",
 };
 
@@ -44,6 +43,7 @@ static unsigned int handle_function(void)
 }
 
 #if BUILDING_GCC_VERSION >= 4009
+namespace {
 static const struct pass_data cyc_complexity_pass_data = {
 #else
 static struct gimple_opt_pass cyc_complexity_pass = {
@@ -54,7 +54,8 @@ static struct gimple_opt_pass cyc_complexity_pass = {
 #if BUILDING_GCC_VERSION >= 4008
 		.optinfo_flags		= OPTGROUP_NONE,
 #endif
-#if BUILDING_GCC_VERSION >= 4009
+#if BUILDING_GCC_VERSION >= 5000
+#elif BUILDING_GCC_VERSION >= 4009
 		.has_gate		= false,
 		.has_execute		= true,
 #else
@@ -76,23 +77,27 @@ static struct gimple_opt_pass cyc_complexity_pass = {
 };
 
 #if BUILDING_GCC_VERSION >= 4009
-namespace {
 class cyc_complexity_pass : public gimple_opt_pass {
 public:
 	cyc_complexity_pass() : gimple_opt_pass(cyc_complexity_pass_data, g) {}
+#if BUILDING_GCC_VERSION >= 5000
+	virtual unsigned int execute(function *) { return handle_function(); }
+#else
 	unsigned int execute() { return handle_function(); }
+#endif
 };
 }
-#endif
 
 static struct opt_pass *make_cyc_complexity_pass(void)
 {
-#if BUILDING_GCC_VERSION >= 4009
 	return new cyc_complexity_pass();
-#else
-	return &cyc_complexity_pass.pass;
-#endif
 }
+#else
+static struct opt_pass *make_cyc_complexity_pass(void)
+{
+	return &cyc_complexity_pass.pass;
+}
+#endif
 
 int plugin_init(struct plugin_name_args *plugin_info, struct plugin_gcc_version *version)
 {
