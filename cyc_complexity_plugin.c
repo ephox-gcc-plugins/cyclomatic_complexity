@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2015 by Emese Revfy <re.emese@gmail.com>
+ * Copyright 2011-2016 by Emese Revfy <re.emese@gmail.com>
  * Licensed under the GPL v2, or (at your option) v3
  *
  * Homepage:
@@ -23,7 +23,7 @@
 int plugin_is_GPL_compatible;
 
 static struct plugin_info cyc_complexity_plugin_info = {
-	.version	= "20150523",
+	.version	= "20160202",
 	.help		= "Cyclomatic Complexity\n",
 };
 
@@ -37,7 +37,6 @@ static unsigned int handle_function(void)
 
 	xloc = expand_location(DECL_SOURCE_LOCATION(current_function_decl));
 	fprintf(stderr, "Cyclomatic Complexity %d %s:%s\n", complexity, xloc.file, DECL_NAME_POINTER(current_function_decl));
-//	inform(loc, "Cyclomatic Complexity %d %s\n", complexity, DECL_NAME_POINTER(current_function_decl));
 
 	return 0;
 }
