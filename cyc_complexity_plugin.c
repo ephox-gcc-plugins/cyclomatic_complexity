@@ -7,7 +7,7 @@
  *
  * http://en.wikipedia.org/wiki/Cyclomatic_complexity
  * The complexity M is then defined as:
- * M = E − N + 2P
+ * M = E - N + 2P
  * where
  *
  *  E = the number of edges of the graph
@@ -32,7 +32,7 @@ static unsigned int handle_function(void)
 	int complexity;
 	expanded_location xloc;
 
-	// M = E − N + 2P
+	// M = E - N + 2P
 	complexity = n_edges_for_fn(cfun) - n_basic_blocks_for_fn(cfun) + 2;
 
 	xloc = expand_location(DECL_SOURCE_LOCATION(current_function_decl));
