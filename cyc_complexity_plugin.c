@@ -23,11 +23,11 @@
 int plugin_is_GPL_compatible;
 
 static struct plugin_info cyc_complexity_plugin_info = {
-	.version	= "20160202",
+	.version	= "20160217",
 	.help		= "Cyclomatic Complexity\n",
 };
 
-static unsigned int handle_function(void)
+static unsigned int cyc_complexity_execute(void)
 {
 	int complexity;
 	expanded_location xloc;
@@ -41,62 +41,12 @@ static unsigned int handle_function(void)
 	return 0;
 }
 
-#if BUILDING_GCC_VERSION >= 4009
-namespace {
-static const struct pass_data cyc_complexity_pass_data = {
-#else
-static struct gimple_opt_pass cyc_complexity_pass = {
-	.pass = {
-#endif
-		.type			= GIMPLE_PASS,
-		.name			= "cyc_complexity",
-#if BUILDING_GCC_VERSION >= 4008
-		.optinfo_flags		= OPTGROUP_NONE,
-#endif
-#if BUILDING_GCC_VERSION >= 5000
-#elif BUILDING_GCC_VERSION >= 4009
-		.has_gate		= false,
-		.has_execute		= true,
-#else
-		.gate			= NULL,
-		.execute		= handle_function,
-		.sub			= NULL,
-		.next			= NULL,
-		.static_pass_number	= 0,
-#endif
-		.tv_id			= TV_NONE,
-		.properties_required	= 0,
-		.properties_provided	= 0,
-		.properties_destroyed	= 0,
-		.todo_flags_start	= 0,
-		.todo_flags_finish	= TODO_dump_func
-#if BUILDING_GCC_VERSION < 4009
-	}
-#endif
-};
+#define PASS_NAME cyc_complexity
 
-#if BUILDING_GCC_VERSION >= 4009
-class cyc_complexity_pass : public gimple_opt_pass {
-public:
-	cyc_complexity_pass() : gimple_opt_pass(cyc_complexity_pass_data, g) {}
-#if BUILDING_GCC_VERSION >= 5000
-	virtual unsigned int execute(function *) { return handle_function(); }
-#else
-	unsigned int execute() { return handle_function(); }
-#endif
-};
-}
+#define NO_GATE
+#define TODO_FLAGS_FINISH TODO_dump_func
 
-static struct opt_pass *make_cyc_complexity_pass(void)
-{
-	return new cyc_complexity_pass();
-}
-#else
-static struct opt_pass *make_cyc_complexity_pass(void)
-{
-	return &cyc_complexity_pass.pass;
-}
-#endif
+#include "gcc-generate-gimple-pass.h"
 
 int plugin_init(struct plugin_name_args *plugin_info, struct plugin_gcc_version *version)
 {
