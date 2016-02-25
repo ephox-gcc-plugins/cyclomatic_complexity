@@ -23,7 +23,7 @@
 int plugin_is_GPL_compatible;
 
 static struct plugin_info cyc_complexity_plugin_info = {
-	.version	= "20160217",
+	.version	= "20160225",
 	.help		= "Cyclomatic Complexity\n",
 };
 
@@ -32,11 +32,12 @@ static unsigned int cyc_complexity_execute(void)
 	int complexity;
 	expanded_location xloc;
 
-	// M = E - N + 2P
+	/* M = E - N + 2P */
 	complexity = n_edges_for_fn(cfun) - n_basic_blocks_for_fn(cfun) + 2;
 
 	xloc = expand_location(DECL_SOURCE_LOCATION(current_function_decl));
-	fprintf(stderr, "Cyclomatic Complexity %d %s:%s\n", complexity, xloc.file, DECL_NAME_POINTER(current_function_decl));
+	fprintf(stderr, "Cyclomatic Complexity %d %s:%s\n", complexity,
+		xloc.file, DECL_NAME_POINTER(current_function_decl));
 
 	return 0;
 }
@@ -63,8 +64,10 @@ int plugin_init(struct plugin_name_args *plugin_info, struct plugin_gcc_version 
 		return 1;
 	}
 
-	register_callback(plugin_name, PLUGIN_INFO, NULL, &cyc_complexity_plugin_info);
-	register_callback(plugin_name, PLUGIN_PASS_MANAGER_SETUP, NULL, &cyc_complexity_pass_info);
+	register_callback(plugin_name, PLUGIN_INFO, NULL,
+				&cyc_complexity_plugin_info);
+	register_callback(plugin_name, PLUGIN_PASS_MANAGER_SETUP, NULL,
+				&cyc_complexity_pass_info);
 
 	return 0;
 }
