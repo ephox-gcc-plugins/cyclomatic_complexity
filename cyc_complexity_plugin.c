@@ -29,7 +29,7 @@ bool has_log_file;
 FILE *log_file;
 
 static struct plugin_info cyc_complexity_plugin_info = {
-	.version	= "20170220",
+	.version	= "20170221",
 	.help		= "Cyclomatic Complexity\n",
 };
 
@@ -42,8 +42,8 @@ static unsigned int cyc_complexity_execute(void)
 	complexity = n_edges_for_fn(cfun) - n_basic_blocks_for_fn(cfun) + 2;
 
 	xloc = expand_location(DECL_SOURCE_LOCATION(current_function_decl));
-	fprintf(log_file, "Cyclomatic Complexity %d %s:%s\n", complexity,
-		xloc.file, DECL_NAME_POINTER(current_function_decl));
+	fprintf(log_file, "%s%s:%d:%d:%s\t%d\n", has_log_file ? "" : "Cyclomatic Complexity ",
+		xloc.file, xloc.line, xloc.column, DECL_NAME_POINTER(current_function_decl), complexity);
 
 	return 0;
 }
